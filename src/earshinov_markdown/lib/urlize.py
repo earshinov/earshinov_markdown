@@ -1,3 +1,5 @@
+# This file is from markdown-urlize
+
 """A more liberal autolinker
 
 Inspired by Django's urlize function.
