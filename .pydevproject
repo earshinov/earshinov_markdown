@@ -9,5 +9,6 @@
 </pydev_pathproperty>
 <pydev_pathproperty name="org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH">
 <path>/usr/lib/python3.2/site-packages/markdown</path>
+<path>/usr/lib/python3.2/site-packages/mock-0.7.2-py3.2.egg-info</path>
 </pydev_pathproperty>
 </pydev_project>
