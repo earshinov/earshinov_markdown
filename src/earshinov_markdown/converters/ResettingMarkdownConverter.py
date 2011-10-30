@@ -1,9 +1,8 @@
-class ResettingMarkdownConverter:
-  
-  def __init__(self, converter):
-    super(ResettingMarkdownConverter, self).__init__()
-    self.__converter = converter
+from .ConverterDecorator import ConverterDecorator
+
+
+class ResettingMarkdownConverter(ConverterDecorator):
     
   def convert(self, text):
-    self.__converter.reset()
-    return self.__converter.convert(text)
+    self._converter.reset()
+    return self._converter.convert(text)
