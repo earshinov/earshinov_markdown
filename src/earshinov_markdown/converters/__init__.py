@@ -1,4 +1,3 @@
 from .InlineMarkdownConverter import InlineMarkdownConverter
 from .NotesMarkdownConverter import NotesMarkdownConverter
-from .ResettingMarkdownConverter import ResettingMarkdownConverter
 from .SimpleMarkdownConverter import SimpleMarkdownConverter
