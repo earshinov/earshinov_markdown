@@ -5,5 +5,6 @@ from .DefaultExtensions import DefaultExtensions
 from .AncestorAttributesExtension import AncestorAttributesExtension
 from .AutoLinkTargetExtension import AutoLinkTargetExtension
 from .CodeNewlinesRemovalExtension import CodeNewlinesRemovalExtension
+from .HtmlHeaderExtension import HtmlHeaderExtension
 from .StrikeExtension import StrikeExtension
 from .UrlizeExtension import UrlizeExtension
