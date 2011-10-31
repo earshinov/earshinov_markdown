@@ -24,10 +24,13 @@ class CodeNewlinesRemover(Postprocessor):
   заданные пользователем вручную в исходнике Markdown.
   '''
   
-  __RE = re.compile('(<pre.*?>.*?<code.*?>)\n+')
+  __START_RE = re.compile('(<pre.*?>[^<]*<code.*?>)\n+')
+  __END_RE = re.compile('\n+(</code>[^<]*</pre>)')
   
   def run(self, text):
-    return self.__RE.sub(r'\1', text)
+    text = self.__START_RE.sub(r'\1', text)
+    text = self.__END_RE.sub('</code></pre>', text)
+    return text
       
       
 class CodeNewlinesRemovalExtension(Extension):
