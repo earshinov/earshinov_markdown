@@ -9,15 +9,15 @@ class AutoLinkTargetTreeProcessor(Treeprocessor):
   RE_HTTP = re.compile('https?://')
   
   def run(self, root):
-    self.__processChildren(root)
+    self.__processSubtree(root)
     
-  def __processChildren(self, parent):
+  def __processSubtree(self, parent):
     for child in parent:
       if child.tag == 'a' and 'target' not in child.keys():
         href = child.get('href')
         if href is not None and self.RE_HTTP.match(href):
           child.set('target', '_blank')
-      self.__processChildren(child)
+      self.__processSubtree(child)
 
 
 class AutoLinkTargetExtension(Extension):
