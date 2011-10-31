@@ -4,11 +4,18 @@ from markdown.treeprocessors import Treeprocessor
 import re
 
 
-ANCESTOR_ATTRIBUTES = {}
-AncestorAttribute = namedtuple('AncestorAttribute', 'uplevel name value')
-
-def addAncestorAttribute(element, ancestorAttribute):
-  ANCESTOR_ATTRIBUTES.setdefault(element, []).append(ancestorAttribute)
+class AncestorAttribute(namedtuple('AncestorAttribute', 'uplevel name value')):
+  __slots__ = ()
+  def __new__(cls, uplevel, name, value):
+    assert uplevel > 0
+    return super(AncestorAttribute, cls).__new__(cls, uplevel, name, value)
+  
+class AncestorAttributes(dict):
+  def add(self, element, ancestorAttribute):
+    #assert isinstance(ancestorAttribute, AncestorAttribute)
+    self.setdefault(element, []).append(ancestorAttribute)
+    
+ANCESTOR_ATTRIBUTES = AncestorAttributes()
 
 
 class AncestorAttributesExtensionTreeProcessor(Treeprocessor):
@@ -19,21 +26,22 @@ class AncestorAttributesExtensionTreeProcessor(Treeprocessor):
     # элемент из дочернего (`element.find("..")` всегда возвращает `None`).
     # Подсунуть вместо этого ElementTree реализацию из библиотеки LXML можно,
     # но это не вариант — из-за несовместимостей с ней python-markdown не работает.
-    self.__processChildren([root])
+    self.__processSubtree([root])
     
-  def __processChildren(self, parents):
-    for child in parents[-1]:
-      self.__handleChild(child, parents)
-      parents.append(child)
-      self.__processChildren(parents)
-      parents.pop()
+  def __processSubtree(self, ancestorsAndRoot):
+    root = ancestorsAndRoot[-1]
+    for child in root:
+      self.__processElement(child, ancestorsAndRoot)
+      ancestorsAndRoot.append(child)
+      self.__processSubtree(ancestorsAndRoot)
+      ancestorsAndRoot.pop()
       
-  def __handleChild(self, child, parents):
-    if child in ANCESTOR_ATTRIBUTES:
-      for a in ANCESTOR_ATTRIBUTES[child]:
-        if a.uplevel > len(parents):
+  def __processElement(self, element, ancestors):
+    if element in ANCESTOR_ATTRIBUTES:
+      for a in ANCESTOR_ATTRIBUTES[element]:
+        if a.uplevel > len(ancestors):
           continue
-        parents[-a.uplevel].set(a.name, a.value)
+        ancestors[-a.uplevel].set(a.name, a.value)
 
 
 class AncestorAttributesExtension(Extension):
@@ -71,7 +79,7 @@ class AncestorAttributesExtension(Extension):
           # результирующее дерево, так что сразу проставить атрибут элементу-предку
           # мы не можем.  Приходится сохранять атрибуты глобально и расставлять их
           # с помощью отдельного TreeProcessor'а.
-          addAncestorAttribute(parent, AncestorAttribute(uplevel=len(match.group(1)), name=name, value=value))
+          ANCESTOR_ATTRIBUTES.add(parent, AncestorAttribute(uplevel=len(match.group(1)), name=name, value=value))
         else:
           parent.set(name, value)
       return ATTR_RE.sub(attributeCallback, text)
