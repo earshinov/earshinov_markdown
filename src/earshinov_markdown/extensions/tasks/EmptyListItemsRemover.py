@@ -8,7 +8,7 @@ class EmptyListItemsRemover(Postprocessor):
   случае, когда HTML-комментарии присутствуют в разметке списка.  Такие
   элементы вредны, потому что плохо обрабатываются JavaScript'ом страницы задач.'''
   
-  __RE_LIST_ITEM = re.compile(r'<li>(<!--.*?-->)</li>', re.DOTALL)
+  __RE_LIST_ITEM = re.compile(r'<li>(?=(<!--.*?-->))\1</li>', re.DOTALL)
   
   def run(self, text):
     return self.__RE_LIST_ITEM.sub(r'\1', text)
