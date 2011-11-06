@@ -1,3 +1,4 @@
+from markdown import Extension
 from markdown.postprocessors import Postprocessor
 import re
 
@@ -12,3 +13,9 @@ class EmptyListItemsRemover(Postprocessor):
   
   def run(self, text):
     return self.__RE_LIST_ITEM.sub(r'\1', text)
+  
+  
+class EmptyListItemsRemovalExtension(Extension):
+  
+  def extendMarkdown(self, md, md_globals):
+    md.postprocessors.add('liremover', EmptyListItemsRemover(), '_end')

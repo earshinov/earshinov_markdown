@@ -1,4 +1,4 @@
-from earshinov_markdown.extensions.tasks.EmptyListItemsRemover import EmptyListItemsRemover
+from earshinov_markdown.extensions.tasks.EmptyListItemsRemovalExtension import EmptyListItemsRemover
 import unittest
 
 
