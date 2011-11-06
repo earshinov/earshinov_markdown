@@ -1,4 +1,4 @@
-from markdown import etree
+from markdown import etree, Extension
 from markdown.treeprocessors import Treeprocessor
 
 
@@ -27,3 +27,9 @@ class TableMarkupTreeProcessor(Treeprocessor):
       for child in group:
         td.append(child)
     return root
+  
+  
+class TableMarkupExtension(Extension):
+  
+  def extendMarkdown(self, md, md_globals):
+    md.treeprocessors.add('tablemarkup', TableMarkupTreeProcessor(), '<prettify')

@@ -2,7 +2,7 @@ from .CustomListProcessor import CustomListProcessor
 from .EmptyListItemsRemover import EmptyListItemsRemover
 from .ItemTypeExtension import ItemTypeExtension
 from .ListSeparatorExtension import ListSeparatorExtension
-from .TableMarkupTreeProcessor import TableMarkupTreeProcessor
+from .TableMarkupExtension import TableMarkupExtension
 from markdown import Extension
   
 
@@ -14,5 +14,5 @@ class TasksExtension(Extension):
     del md.parser.blockprocessors['olist']
     del md.parser.blockprocessors['ulist']
     ListSeparatorExtension().extendMarkdown(md, md_globals)
-    md.treeprocessors.add('tablemarkup', TableMarkupTreeProcessor(), '<prettify')
+    TableMarkupExtension().extendMarkdown(md, md_globals)
     md.postprocessors.add('liremover', EmptyListItemsRemover(), '_end')
