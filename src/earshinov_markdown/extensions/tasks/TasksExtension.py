@@ -1,6 +1,6 @@
 from .CustomListProcessor import CustomListProcessor
 from .EmptyListItemsRemover import EmptyListItemsRemover
-from .ItemTypePattern import ItemTypePattern
+from .ItemTypeExtension import ItemTypeExtension
 from .ListSeparatorProcessor import ListSeparatorProcessor
 from .TableMarkupTreeProcessor import TableMarkupTreeProcessor
 from markdown import Extension
@@ -9,7 +9,7 @@ from markdown import Extension
 class TasksExtension(Extension):
 
   def extendMarkdown(self, md, md_globals):
-    md.inlinePatterns.add('itemtype', ItemTypePattern(), '<reference')
+    ItemTypeExtension().extendMarkdown(md, md_globals)
     md.parser.blockprocessors.add('customlist', CustomListProcessor(md), '>empty')
     del md.parser.blockprocessors['olist']
     del md.parser.blockprocessors['ulist']
