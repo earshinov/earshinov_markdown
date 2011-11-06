@@ -1,4 +1,5 @@
 from markdown.blockprocessors import HRProcessor
+from markdown import Extension
 
 
 class ListSeparatorProcessor(HRProcessor):
@@ -12,3 +13,9 @@ class ListSeparatorProcessor(HRProcessor):
       parent.text = '{@class=separator}' + text
     else:
       return super(ListSeparatorProcessor, self).run(parent, blocks)
+    
+    
+class ListSeparatorExtension(Extension):
+  
+  def extendMarkdown(self, md, md_globals):
+    md.parser.blockprocessors['hr'] = ListSeparatorProcessor(md.parser)
