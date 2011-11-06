@@ -4,11 +4,11 @@ import unittest
 
 
 class InlineMarkdownConverterTest(unittest.TestCase):
-  
+
   def setUp(self):
     self.dummy = ConverterMock()
     self.converter = InlineMarkdownConverter(self.dummy)
-    
+
   def test_basic(self):
     '''
     InlineMarkdownConverter должен заменять куски разметки

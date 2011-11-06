@@ -8,15 +8,15 @@ class TasksIntegrationTest(unittest.TestCase):
 
   def setUp(self):
     self.md = Markdown([TasksExtension()])
-    
+
   def tests_basic(self):
     source = '''
   Домашние дела
-  
+
     Проблемы с сетью
       <!-- завершено: Сменить адреса DNS-серверов -->
       [sometime] Купить беспроводную точку доступа
-      
+
     Велосипед
       Смазать цепь
 
@@ -29,12 +29,12 @@ class TasksIntegrationTest(unittest.TestCase):
         - Собрать в пакет (distutils?)
 
     -----
-    
+
     Работа
       Освоение C# 4.0
         | C# in Depth
         | C# in a Nutshell
-        
+
 -------
 
 [python-markdown]: http://www.freewisdom.org/projects/python-markdown/

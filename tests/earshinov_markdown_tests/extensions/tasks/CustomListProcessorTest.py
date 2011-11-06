@@ -6,12 +6,12 @@ import re
 
 
 class CustomListProcessorTest(unittest.TestCase):
-  
+
   def setUp(self):
     self.originalMd = Markdown()
     self.md = Markdown([CustomListProcessorExtension()])
 
-    
+
   def test_basic(self):
     source = \
 '''
@@ -36,8 +36,8 @@ r'''^<ul>\s*
   <li>второй\ элемент</li>\s*
 </ul>$''', re.VERBOSE)
     self.assertRegex(self.md.convert(source), expectedRe)
-    
-    
+
+
   def test_one_line_list_is_processed(self):
     source = "  элемент"
     expectedRe = re.compile(
@@ -45,22 +45,22 @@ r'''^<ul>\s*
   <li>элемент</li>\s*
 </ul>$''', re.VERBOSE)
     self.assertRegex(self.md.convert(source), expectedRe)
-    
-    
+
+
   def test_block_without_indent_not_processed(self):
     source = "элемент"
     expectedRe = r"^<p>элемент</p>$"
     self.assertRegex(self.md.convert(source), expectedRe)
-    
-    
+
+
   def test_line_breaks_do_not_break_list(self):
     source = \
 '''
   первый элемент
     второй элемент
       третий элемент
-      
-      
+
+
     четвёртый элемент'''
     expectedRe = re.compile(
 r'''^<ul>\s*
@@ -72,17 +72,17 @@ r'''^<ul>\s*
   </ul>\s*</li>\s*
 </ul>$''', re.VERBOSE)
     self.assertRegex(self.md.convert(source), expectedRe)
-    
-  
+
+
   def test_other_block_breaks_list(self):
     source = \
 '''
   первый элемент
     второй элемент
       третий элемент
-      
+
 -----
-      
+
     четвёртый элемент'''
     expectedRe = re.compile(
 r'''^
@@ -99,8 +99,8 @@ r'''^
 </ul>
 $''', re.VERBOSE)
     self.assertRegex(self.md.convert(source), expectedRe)
-    
-    
+
+
   def test_multiline_comments_inside_list(self):
     source = \
 '''
@@ -117,8 +117,8 @@ r'''^<ul>\s*
   <li>второй\ элемент</li>\s*
 </ul>$''', re.VERBOSE)
     self.assertRegex(self.md.convert(source), expectedRe)
-    
-  
+
+
   def test_markdown_inside_list(self):
     source = "  первый **элемент**"
     expectedRe = re.compile(
@@ -126,8 +126,8 @@ r'''^<ul>\s*
   <li>первый\ <(b|strong)>элемент</(b|strong)></li>\s*
 </ul>$''', re.VERBOSE)
     self.assertRegex(self.md.convert(source), expectedRe)
-    
-    
+
+
   def test_list_markers(self):
     source = \
 '''
@@ -149,8 +149,8 @@ r'''^<ul>\s*
   <li>второй\ элемент</li>\s*
 </ul>$''', re.VERBOSE)
     self.assertRegex(self.md.convert(source), expectedRe)
-    
-    
+
+
   def test_marker_on_first_line_is_enough(self):
     source = \
 '''
@@ -164,8 +164,8 @@ r'''^<ol>\s*
   <li>третий\ элемент</li>\s*
 </ol>$''', re.VERBOSE)
     self.assertRegex(self.md.convert(source), expectedRe)
-    
-    
+
+
   def test_incorrect_markers_on_consequent_lines_not_touched(self):
     source = \
 '''
@@ -181,8 +181,8 @@ r'''^<ol>\s*
   <li>четвёртый\ элемент</li>\s*
 </ol>$''', re.VERBOSE)
     self.assertRegex(self.md.convert(source), expectedRe)
-    
-    
+
+
   def test_markers_on_consequent_lines_not_touched_if_no_marker_on_first_line(self):
     source = \
 '''
@@ -198,8 +198,8 @@ r'''^<ul>\s*
   <li>| четвёртый\ элемент</li>\s*
 </ul>$''', re.VERBOSE)
     self.assertRegex(self.md.convert(source), expectedRe)
-    
-    
+
+
   def test_incorrect_outdent_beyond_first_column(self):
     source = \
 '''
@@ -216,8 +216,8 @@ r'''^
 </ul>\s*
 $''', re.VERBOSE)
     self.assertRegex(self.md.convert(source), expectedRe)
-    
-    
+
+
   def test_incorrect_outdent_inside_list(self):
     source = \
 '''

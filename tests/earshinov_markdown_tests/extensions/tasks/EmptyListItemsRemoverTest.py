@@ -3,15 +3,15 @@ import unittest
 
 
 class EmptyListItemsRemoverTest(unittest.TestCase):
-  
+
   def setUp(self):
     self.remover = EmptyListItemsRemover()
-    
+
   def test_basic(self):
     text = "<ul><li>first</li><li><!-- comment --></li><li>third</li></ul>"
     expected = "<ul><li>first</li><!-- comment --><li>third</li></ul>"
     self.assertEqual(expected, self.remover.run(text))
-    
+
   def test_items_with_content_not_removed(self):
     text1 = \
       "<ul>" + \

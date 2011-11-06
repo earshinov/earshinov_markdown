@@ -6,7 +6,7 @@ from .UrlizeExtension import UrlizeExtension
 
 
 class DefaultExtensions:
-  
+
   @staticmethod
   def get():
     return [
@@ -20,7 +20,7 @@ class DefaultExtensions:
       StrikeExtension(),
       UrlizeExtension(),
     ]
-  
+
   @staticmethod
   def patchMarkdownGlobals():
     AncestorAttributesExtension.patchMarkdownGlobals()

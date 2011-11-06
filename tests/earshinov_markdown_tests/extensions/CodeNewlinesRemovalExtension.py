@@ -12,7 +12,7 @@ class CodeNewlinesRemovalExtensionTest(unittest.TestCase):
     source = '''<pre><code>\nНекоторый код, напечатанный на новой строке\n</code></pre>'''
     expected = '''<pre><code>Некоторый код, напечатанный на новой строке</code></pre>'''
     self.assertEqual(expected, self.md.convert(source))
-    
+
   def test_attributes_are_preserved(self):
     source = '''<pre id='id'><code class='class'>\n...\n</code></pre>'''
     expected = '''<pre id='id'><code class='class'>...</code></pre>'''

@@ -14,9 +14,9 @@ class ItemTypePattern(BasePattern):
 
   def handleMatch(self, m):
     return '%s{@class=type_%s}%s' % (m.group(2), m.group(3), m.group(4))
-  
-  
+
+
 class ItemTypeExtension(Extension):
-  
+
   def extendMarkdown(self, md, md_globals):
     md.inlinePatterns.add('itemtype', ItemTypePattern(), '<reference')

@@ -4,12 +4,12 @@ import unittest
 
 
 class NotesMarkdownConverterTest(unittest.TestCase):
-  
+
   def setUp(self):
     self.maxDiff = 1000 # настройка unittest, чтобы выводил различия в длинных текстах ниже
     self.dummy = ConverterMock()
     self.converter = NotesMarkdownConverter(self.dummy)
-    
+
   def test_basic(self):
     '''
     NotesMarkdownConverter должен запускать парсер markdown
@@ -39,7 +39,7 @@ class NotesMarkdownConverterTest(unittest.TestCase):
       "#Какой-то подозрительный заголовок (не учитывается)\n\n" + \
       "}}}{{{# Заголовок раздела без содержимого (учитывается)}}}";
     self.assertEqual(expected, self.converter.convert(source))
-    
+
   def test_markup_before_first_heading_is_ignored(self):
     source = \
       "Первый абзац\n\n" + \
@@ -47,4 +47,3 @@ class NotesMarkdownConverterTest(unittest.TestCase):
     expected = \
       "{{{# Заголовок первого уровня\n}}}"
     self.assertEqual(expected, self.converter.convert(source))
-  

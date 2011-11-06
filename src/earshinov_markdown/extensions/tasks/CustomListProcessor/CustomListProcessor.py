@@ -8,20 +8,20 @@ import re
 class CustomListProcessor(BlockProcessor):
 
   class __Reset(Exception):
-    
+
     def __init__(self, firstLine, lines):
       Exception.__init__(self)
       self.firstLine = firstLine
       self.lines = lines
-      
+
   __RE_HTML_COMMENT = re.compile(r'<!--.*?-->', re.DOTALL)
-      
+
   def __init__(self, markdown):
     super(CustomListProcessor, self).__init__(markdown.parser)
     self.__markdown = markdown
     self.__levelsController = IndentationLevelsController()
     self.__recursionCount = 0
-  
+
   def test(self, parent, block):
     shouldRun = block and not block.isspace() and block[0].isspace()
     if self.__recursionCount == 0 and not shouldRun:
@@ -42,19 +42,19 @@ class CustomListProcessor(BlockProcessor):
     self.__handleBlock(parent, blocks.pop(0))
     self.__recursionCount -= 1
     self.parser.state.reset()
-    
+
   def __handleBlock(self, parent, block):
     if self.__recursionCount == 1:
       block = self.__replaceHtmlComments(block)
     lines = [line for line in block.split('\n')]
     self.__handleLines(parent, lines[0], lines[1:])
-    
+
   def __replaceHtmlComments(self, text):
     # необходимо, потому что многострочные HTML-комментарии могут ломать структуру списка
     def replace(m):
       return self.__markdown.htmlStash.store(m.group())
     return self.__RE_HTML_COMMENT.sub(replace, text)
-    
+
   def __handleLines(self, parent, firstLine, lines):
     while True:
       level = self.__handleFirstLine(parent, firstLine)
@@ -69,12 +69,12 @@ class CustomListProcessor(BlockProcessor):
   def __handleFirstLine(self, parent, line):
     m = re.match('(\s*)(.)(\s*)(.*)', line)
     assert(m is not None)
-    
+
     indent = m.group(1)
     char = m.group(2)
     shortText = m.group(4)
     fullText = m.group(2) + m.group(3) + m.group(4)
-    
+
     ret = self.__levelsController.findLevel(indent)
     if ret.shouldCreate:
       parentElement = ret.parentElement
@@ -89,10 +89,10 @@ class CustomListProcessor(BlockProcessor):
       level = ret.existingLevel
       self.__levelsController.cutNested(level)
       text = shortText if char == level.char else fullText
-    
+
     self.__appendItem(level, text)
     return level
-  
+
   def __createListElement(self, char):
     if char not in '*-|':
       char = None
@@ -102,7 +102,7 @@ class CustomListProcessor(BlockProcessor):
       return char, etree.Element('ol')
     elif char == '|':
       return char, etree.Element('ul', { 'class': 'details' })
-  
+
   def __handleConsequentLines(self, lines, level):
     it = iter(lines)
     reuseLine = False
@@ -129,10 +129,10 @@ class CustomListProcessor(BlockProcessor):
           break
         self.__levelsController.cutNested(level)
         reuseLine = True
-        
+
   def __appendItem(self, level, text):
     self.parser.parseChunk(level.appendChild(), text)
-    
+
   def __appendSubblock(self, level, firstLine, lineIterator):
     indent = re.match('\s*', firstLine).group()
     subblock = [firstLine]

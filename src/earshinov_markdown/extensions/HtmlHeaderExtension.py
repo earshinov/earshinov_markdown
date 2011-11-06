@@ -4,10 +4,10 @@ from markdown.treeprocessors import Treeprocessor
 
 
 class HtmlHeaderTreeProcessor(Treeprocessor):
-  
+
   def run(self, root):
     root.insert(0, etree.Element('meta', {'charset': 'utf-8'}))
-    
+
     title = None
     for child in root:
       if child.tag == 'h1':
@@ -23,10 +23,10 @@ class HtmlHeaderTreeProcessor(Treeprocessor):
       root.insert(1, titleElement)
 
     return root
-  
+
 
 class HtmlHeaderPostprocessor(Postprocessor):
-  
+
   def run(self, text):
     return '<!DOCTYPE html>\n' + text
 

@@ -2,13 +2,13 @@ import sys
 
 
 class FileOperator:
-  
+
   def __init__(self, converter):
     self.__converter = converter
-    
+
   def process(self, text):
     return self.__converter.convert(text)
-    
+
   def processFiles(self, sourceFilename, outputFilename):
 
     if sourceFilename is None:
@@ -24,7 +24,7 @@ class FileOperator:
     else:
       with open(outputFilename, 'w', encoding='utf-8') as file:
         file.write(output)
-        
+
   def processConsole(self, args):
     if len(args) == 1:
       inputFilename = None

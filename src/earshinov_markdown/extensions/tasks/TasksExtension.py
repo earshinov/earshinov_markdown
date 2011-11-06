@@ -4,7 +4,7 @@ from .ItemTypeExtension import ItemTypeExtension
 from .ListSeparatorExtension import ListSeparatorExtension
 from .TableMarkupExtension import TableMarkupExtension
 from markdown import Extension
-  
+
 
 class TasksExtension(Extension):
 

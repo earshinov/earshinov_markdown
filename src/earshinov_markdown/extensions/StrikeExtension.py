@@ -5,9 +5,9 @@ from markdown.inlinepatterns import SimpleTagPattern
 
 
 class StrikePattern(SimpleTagPattern):
-  
+
   STRIKE_RE = r'(--)(.+?)--'
-  
+
   def __init__(self):
     super(StrikePattern, self).__init__(self.STRIKE_RE, 'strike')
 

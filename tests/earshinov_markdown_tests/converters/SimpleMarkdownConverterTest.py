@@ -3,10 +3,10 @@ import unittest
 
 
 class SimpleMarkdownConverterTest(unittest.TestCase):
-  
+
   def setUp(self):
     self.converter = SimpleMarkdownConverter()
-  
+
   def test_basic(self):
     '''SimpleMarkdownConverter должен просто вызывать markdown'''
     source = "Текст"

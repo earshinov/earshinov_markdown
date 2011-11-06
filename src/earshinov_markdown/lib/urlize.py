@@ -51,18 +51,18 @@ class UrlizePattern(markdown.inlinepatterns.Pattern):
     """ Return a link Element given an autolink (`http://example/com`). """
     def handleMatch(self, m):
         url = m.group(2)
-        
+
         if url.startswith('<'):
             url = url[1:-1]
-            
+
         text = url
-        
+
         if not url.split('://')[0] in ('http','https','ftp'):
             if '@' in url and not '/' in url:
                 url = 'mailto:' + url
             else:
                 url = 'http://' + url
-    
+
         el = markdown.etree.Element("a")
         el.set('href', url)
         el.text = markdown.AtomicString(text)

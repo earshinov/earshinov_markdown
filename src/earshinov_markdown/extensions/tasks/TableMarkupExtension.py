@@ -5,8 +5,8 @@ from markdown.treeprocessors import Treeprocessor
 class TableMarkupTreeProcessor(Treeprocessor):
   '''Оборачивает результаты работы парсера Markdown в элементы tr и td, так чтобы
   список задач можно было оформить в несколько столбцов.  Переход к новому столбцу
-  осуществляется там, где в результирующей разметке встречается элемент hr'''   
-  
+  осуществляется там, где в результирующей разметке встречается элемент hr'''
+
   def run(self, root):
     groups = []
     group = None
@@ -18,7 +18,7 @@ class TableMarkupTreeProcessor(Treeprocessor):
         group = []
         groups.append(group)
       group.append(child)
-    
+
     # делаем в два этапа, чтобы избежать параллельного обхода и модификации
     root.clear()
     tr = etree.SubElement(root, 'tr')
@@ -27,9 +27,9 @@ class TableMarkupTreeProcessor(Treeprocessor):
       for child in group:
         td.append(child)
     return root
-  
-  
+
+
 class TableMarkupExtension(Extension):
-  
+
   def extendMarkdown(self, md, md_globals):
     md.treeprocessors.add('tablemarkup', TableMarkupTreeProcessor(), '<prettify')

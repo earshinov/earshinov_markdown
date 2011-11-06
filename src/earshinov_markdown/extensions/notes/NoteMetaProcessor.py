@@ -3,17 +3,17 @@ from markdown.blockprocessors import BlockProcessor
 
 
 class NoteMetaProcessor(BlockProcessor):
-    
+
   def test(self, parent, block):
     for line in block.split('\n'):
       if line.startswith('Date: ') or line.startswith('Tags: '):
         continue
       return False
     return True
-  
+
   def run(self, parent, blocks):
     block = blocks.pop(0);
-    
+
     div = etree.SubElement(parent, 'div', { 'class': 'note_meta' })
 
     for line in block.split('\n'):

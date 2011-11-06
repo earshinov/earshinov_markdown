@@ -2,10 +2,10 @@ from markdown import etree
 from markdown.treeprocessors import Treeprocessor
 
 
-class NotesMarkupTreeProcessor(Treeprocessor): 
-  
+class NotesMarkupTreeProcessor(Treeprocessor):
+
   def run(self, root):
-    
+
     # список собранных заметок
     notes = []
 
@@ -29,14 +29,14 @@ class NotesMarkupTreeProcessor(Treeprocessor):
         self.__reorganizeNoteMeta(note, header, child)
       else:
         contents.append(child)
-        
+
     root.clear()
     for note, content, contents in notes:
       root.append(note)
       for child in contents:
         content.append(child)
     return root
-  
+
   def __copyTitle(self, noteHeader, h1):
     title = etree.SubElement(noteHeader, 'div', { 'class': 'title' })
     title.text = h1.text
