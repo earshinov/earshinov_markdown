@@ -1,1 +1,1 @@
-from .CustomListProcessor import CustomListProcessor
+from .CustomListProcessorExtension import CustomListProcessorExtension

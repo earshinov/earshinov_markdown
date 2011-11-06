@@ -14,6 +14,8 @@ class IndentationLevelsController:
       return self.AppendLevel(self)
     if self.__levels[pos].indent == indent:
       return self.UseLevel(self.__levels[pos])
+    # self.__levels[pos].indent > indent,
+    # self.__levels[pos-1].indent < indent
     if pos > 0:
       return self.UseLevel(self.__levels[pos-1])
     return self.PrependLevel(self)
