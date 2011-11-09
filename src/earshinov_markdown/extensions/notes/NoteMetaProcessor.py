@@ -1,4 +1,4 @@
-from markdown import etree
+from markdown import etree, Extension
 from markdown.blockprocessors import BlockProcessor
 
 
@@ -29,3 +29,9 @@ class NoteMetaProcessor(BlockProcessor):
           # разделяем теги пробелами, иначе в вёрстке отступ
           # между ними будет меньше положенного
           a.tail = ' '
+
+
+class NotesMetaProcessorExtension(Extension):
+
+  def extendMarkdown(self, md, md_globals):
+    md.parser.blockprocessors.add('notemeta', NoteMetaProcessor(md), '<paragraph')

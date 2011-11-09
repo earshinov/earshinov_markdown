@@ -1,4 +1,4 @@
-from .NoteMetaProcessor import NoteMetaProcessor
+from .NoteMetaProcessor import NotesMetaProcessorExtension
 from .NotesMarkupTreeProcessor import NotesMarkupTreeProcessor
 from markdown import Extension
 
@@ -6,5 +6,5 @@ from markdown import Extension
 class NotesExtension(Extension):
 
   def extendMarkdown(self, md, md_globals):
-    md.parser.blockprocessors.add('notemeta', NoteMetaProcessor(md), '<paragraph')
+    NotesMetaProcessorExtension().extendMarkdown(md, md_globals)
     md.treeprocessors.add('notesmarkup', NotesMarkupTreeProcessor(), '<prettify')
