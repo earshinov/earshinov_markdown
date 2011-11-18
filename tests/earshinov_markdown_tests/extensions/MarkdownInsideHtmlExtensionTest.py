@@ -1,4 +1,5 @@
-from earshinov_markdown.extensions import MarkdownInsideHtmlExtension
+from earshinov_markdown.extensions import MarkdownInsideHtmlExtension, \
+  HtmlHeaderExtension
 from markdown import Markdown
 import re
 import unittest
@@ -65,4 +66,35 @@ class MarkdownInsideHtmlExtensionTest(unittest.TestCase):
     # считает, что это HTML, и не вставляет элементы p, либо не считает, что это HTML,
     # и вставляет элементы p
     self.assertRegex(self.md.convert(source), "^(<p>)?<(b|strong)>текст</(b|strong)>(</p>)?$")
+
+  def test_disabling_extension(self):
+    # должна быть возможность отключить расширения, меняющие структуру документа,
+    # чтобы эти изменения не применялись к содержимому блоков <MD>...</MD>
+    md = Markdown([HtmlHeaderExtension(), MarkdownInsideHtmlExtension(
+      disabledTreeProcessors=['htmlheader'], disabledPostprocessors=['htmlheader'])])
+
+    source = "# Заголовок 1\n\n<div><MD># Заголовок 2</MD></div>"
+    expectedRe = ( "^" +
+      # title, добавленный расширением HtmlHeader
+      ".*<title>Заголовок 1</title>\s*" +
+      "<h1>Заголовок 1</h1>\s*" +
+      # если не отключать расширения, title появился бы и здесь
+      "<div><h1>Заголовок 2</h1></div>$" )[0]
+    self.assertRegex(md.convert(source), expectedRe)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

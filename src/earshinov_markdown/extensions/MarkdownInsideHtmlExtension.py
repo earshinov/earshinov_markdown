@@ -17,10 +17,28 @@ class MarkdownInsideHtmlPostprocessor(Postprocessor):
 
   RE = re.compile('<MD>(.*?)</MD>', re.DOTALL)
 
-  def __init__(self, md):
+  def __init__(self, md, disabledTreeProcessors=None, disabledPostprocessors=None):
+    """
+    @param disabledTreeProcessors
+        Список/множество названий tree-процессоров, которые
+        нужно отключать для дополнительных запусков Markdown
+    @param disabledPostprocessors
+        Список/множество названий постпроцессоров, которые
+        нужно отключать для дополнительных запусков Markdown
+
+    Аргументы disabled* предназначены для того, чтобы для дополнительных запусков Markdown
+    отключать расширения, изменяющие структуру результирующего документа, иначе эти
+    изменения структуры будут применены к содержимому блоков <MD>...</MD>
+    """
     super(MarkdownInsideHtmlPostprocessor, self).__init__()
     self.markdown = md
     self.__recursionCount = 0
+
+    # store self.__disabled*
+    self.__disabledTreeProcessors = {} if disabledTreeProcessors is None else \
+      dict((name, None) for name in disabledTreeProcessors)
+    self.__disabledPostprocessors = {} if disabledPostprocessors is None else \
+      dict((name, None) for name in disabledPostprocessors)
 
   def run(self, text):
     if self.__recursionCount > 0:
@@ -54,15 +72,51 @@ class MarkdownInsideHtmlPostprocessor(Postprocessor):
     self.markdown.treeprocessors.add('stripsinglep', proc, '_end')
     self.markdown.treeprocessors.add('stripsinglep2', proc, '_end')
 
+    # disable self.__disabled*
+    # вместо удаления расширений подставляем ничего не делающие реализации,
+    # чтобы не приходилось запоминать  позиции, в которых располагались расширения
+    for k in self.__disabledTreeProcessors:
+      self.__disabledTreeProcessors[k] = self.markdown.treeprocessors[k]
+      self.markdown.treeprocessors[k] = NoopTreeProcessor()
+    for k in self.__disabledPostprocessors:
+      self.__disabledPostprocessors[k] = self.markdown.postprocessors[k]
+      self.markdown.postprocessors[k] = NoopPostprocessor()
+
   def _restoreMarkdown(self):
     del self.markdown.treeprocessors['stripsinglep']
     del self.markdown.treeprocessors['stripsinglep2']
 
+    # restore self.__disabled*
+    for k, v in self.__disabledTreeProcessors.items():
+      self.markdown.treeprocessors[k] = v
+    for k, v in self.__disabledPostprocessors.items():
+      self.markdown.postprocessors[k] = v
+
 
 class MarkdownInsideHtmlExtension(Extension):
 
+  def __init__(self, disabledTreeProcessors=None, disabledPostprocessors=None):
+    """
+    @param disabledTreeProcessors
+        Список/множество названий tree-процессоров, которые
+        нужно отключать для дополнительных запусков Markdown
+    @param disabledPostprocessors
+        Список/множество названий постпроцессоров, которые
+        нужно отключать для дополнительных запусков Markdown
+
+    Аргументы disabled* предназначены для того, чтобы для дополнительных запусков Markdown
+    отключать расширения, изменяющие структуру результирующего документа, иначе эти
+    изменения структуры будут применены к содержимому блоков <MD>...</MD>
+    """
+    super(MarkdownInsideHtmlExtension, self).__init__()
+    self.__disabledTreeProcessors = disabledTreeProcessors
+    self.__disabledPostprocessors = disabledPostprocessors
+
   def extendMarkdown(self, md, md_globals):
-    md.postprocessors.add('mdinsidehtml', MarkdownInsideHtmlPostprocessor(md), '_end')
+    proc = MarkdownInsideHtmlPostprocessor(md,
+      self.__disabledTreeProcessors,
+      self.__disabledPostprocessors)
+    md.postprocessors.add('mdinsidehtml', proc, '_end')
 
 
 class StripSingleParagraphTreeProcessor(Treeprocessor):
@@ -105,3 +159,13 @@ class StripSingleParagraphTreeProcessor(Treeprocessor):
       root.remove(self.dummyElement)
       self.dummyElement = None
     return root
+
+
+class NoopTreeProcessor(Treeprocessor):
+  """Ничего не делающий Tree-процессор"""
+  pass
+
+class NoopPostprocessor(Postprocessor):
+  """Ничего не делающий постпроцессор"""
+  def run(self, text):
+    return text
