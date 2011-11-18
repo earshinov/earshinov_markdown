@@ -6,5 +6,6 @@ from .AncestorAttributesExtension import AncestorAttributesExtension
 from .AutoLinkTargetExtension import AutoLinkTargetExtension
 from .CodeNewlinesRemovalExtension import CodeNewlinesRemovalExtension
 from .HtmlHeaderExtension import HtmlHeaderExtension
+from .MarkdownInsideHtmlExtension import MarkdownInsideHtmlExtension
 from .StrikeExtension import StrikeExtension
 from .UrlizeExtension import UrlizeExtension
