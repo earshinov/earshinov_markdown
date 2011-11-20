@@ -124,10 +124,9 @@ $''', re.VERBOSE)
     expectedRe = re.compile(
 r'''^
 <div\ class=["']note["']>\s*
-  <div\ class=["']header["']>\s* (
-    <div\ class=["']title["']>Заметка</div>\s* <div\ class=["']date["']>01\.01\.2000</div> |
-    <div\ class=["']date["']>01\.01\.2000</div>\s* <div\ class=["']title["']>Заметка</div>
-  ) \s*
+  <div\ class=["']header["']>\s*
+    <div\ class=["']title["']>Заметка</div>\s*
+    <div\ class=["']date["']>01\.01\.2000</div>\s*
   </div>\s*
   <div\ class=["']content["']>\s*
     Текст\s+Продолжение\ текста\s*

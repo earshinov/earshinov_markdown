@@ -25,10 +25,9 @@ Tags: заметка, тест
     expectedRe = re.compile(
 r'''^
 <div\ class=["']note["']>\s*
-  <div\ class=["']header["']>\s* (
-    <div\ class=["']title["']>Заметка</div>\s* <div\ class=["']date["']>14\.11\.2011</div> |
-    <div\ class=["']date["']>14\.11\.2011</div>\s* <div\ class=["']title["']>Заметка</div>
-  ) \s*
+  <div\ class=["']header["']>\s*
+    <div\ class=["']title["']>Заметка</div>\s*
+    <div\ class=["']date["']>14\.11\.2011</div>\s*
   </div>\s*
   <div\ class=["']content["']>\s*
     <p>Текст\ заметки\ с\ <strong>форматированием</strong>.</p>\s*

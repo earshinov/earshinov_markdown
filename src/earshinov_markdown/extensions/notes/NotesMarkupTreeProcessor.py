@@ -66,6 +66,6 @@ class NotesMarkupTreeProcessor(Treeprocessor):
       elif child.get('class') == 'tags':
         tags = child
     if date is not None:
-      noteHeader.insert(0, date)
+      noteHeader.append(date)
     if tags is not None:
       note.append(tags)
