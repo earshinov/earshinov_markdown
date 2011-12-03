@@ -13,6 +13,7 @@ class CustomListProcessorTest(unittest.TestCase):
 
 
   def test_basic(self):
+    # Сравни с аналогичным тестом HierarchyByIndentationBuilder
     source = \
 '''
   первый элемент
@@ -33,6 +34,21 @@ r'''^<ul>\s*
     </ul>\s*</li>\s*
     <li>ещё\ вложенный\ элемент</li>\s*
   </ul>\s*</li>\s*
+  <li>второй\ элемент</li>\s*
+</ul>$''', re.VERBOSE)
+    self.assertRegex(self.md.convert(source), expectedRe)
+
+
+  def test_separators(self):
+    source = \
+'''
+  первый элемент
+  ----
+  второй элемент'''
+    expectedRe = re.compile(
+r'''^<ul>\s*
+  <li>первый\ элемент</li>\s*
+  <li\ class=["']separator["'](>|\ */>|></li>)\s*
   <li>второй\ элемент</li>\s*
 </ul>$''', re.VERBOSE)
     self.assertRegex(self.md.convert(source), expectedRe)
@@ -201,6 +217,7 @@ r'''^<ul>\s*
 
 
   def test_incorrect_outdent_beyond_first_column(self):
+    # Сравни с аналогичным тестом HierarchyByIndentationBuilder
     source = \
 '''
     первый
@@ -219,24 +236,21 @@ $''', re.VERBOSE)
 
 
   def test_incorrect_outdent_inside_list(self):
+    # Сравни с аналогичным тестом HierarchyByIndentationBuilder
     source = \
 '''
   первый
     второй
         третий
       четвёртый'''
-    # Внутри одного LI ("второй") создаётся два UL: для элементов "третий" и четвёртый"
     expectedRe = re.compile(
 r'''^<ul>\s*
   <li>первый<ul>\s*
-    <li>второй
-      <ul>\s*
-        <li>третий</li>\s*
-      </ul>\s*
-      <ul>\s*
-        <li>четвёртый</li>\s*
-      </ul>\s*
-    </li>\s*
+    <li>второй<ul>\s*
+      <li>третий</li>\s*
+      (</ul>\s*</li>\s*)?
+      <li>четвёртый</li>\s*
+    (</ul>\s*</li>\s*)?
   </ul>\s*</li>\s*
 </ul>$''', re.VERBOSE)
     self.assertRegex(self.md.convert(source), expectedRe)
