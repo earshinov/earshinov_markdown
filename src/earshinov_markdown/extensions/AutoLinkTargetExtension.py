@@ -23,4 +23,4 @@ class AutoLinkTargetTreeProcessor(Treeprocessor):
 class AutoLinkTargetExtension(Extension):
 
   def extendMarkdown(self, md, md_globals):
-    md.treeprocessors.add('autotarget', AutoLinkTargetTreeProcessor(), '_end')
+    md.treeprocessors.add('auto_link_target', AutoLinkTargetTreeProcessor(), '_end')
