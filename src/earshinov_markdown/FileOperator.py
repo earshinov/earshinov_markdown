@@ -33,6 +33,6 @@ class FileOperator:
       inputFilename = args[1]
       outputFilename = args[2]
     else:
-      print('Usage: %s [INPUT.html OUTPUT.html]' % args[0], file=sys.stderr)
+      print('Usage: %s [INPUT.md OUTPUT.html]' % args[0], file=sys.stderr)
       exit(1)
     self.processFiles(inputFilename, outputFilename)
