@@ -24,6 +24,30 @@ class MarkdownInsideHtmlExtensionTest(unittest.TestCase):
     expectedRe = "^<div><p>Первый параграф</p>\s*<p>Второй параграф</p></div>$"
     self.assertRegex(self.md.convert(source), expectedRe)
 
+  # KNOWN ISSUE: Если внутри <MD> имеется блок кода, по правилам Markdown
+  # отформатированный с помощью отступов и отделённый от остального
+  # содержимого <MD> переносами строк (\n\n), этот блок кода отрендерится
+  # не в виде <pre></code>, а в виде параграфа.
+  #
+  # Это происходит потому, что при обработке блоков разметки, разделённых
+  # \n\n, код сборки HTML-элемента внутри стандартного HtmlBlockPreprocessor
+  # выполняет block.strip(), таким образом убирая отступ первой строки
+  # блока кода и портя разметку Markdown.
+  #
+  # Багрепорт писать не хочется, потому что для нормального HTML-контента
+  # выполнение strip() не несёт вреда, а вариант использования Markdown
+  # внутри HTML авторы python-markdown, очевидно, не рассматривали.
+  #
+  # Для обхода описанной ситуации можно вручную писать <pre><code> или
+  # использовать другой вариант Markdown-разметки блоков кода, предоставляемый
+  # стандартным расширением python-markdown `fenced_code`.
+  #
+  @unittest.skip
+  def test_code_block_inside_md(self):
+    source = "<div><MD>Текст\n\n    code\n\nТекст</MD></div>"
+    expectedRe = "^<div><p>Текст</p>\s*<pre><code>code</code></pre>\s*<p>Текст</p></div>$"
+    self.assertRegex(self.md.convert(source), expectedRe)
+
   def test_parser_dont_fail_if_md_inside_md(self):
     source = "перед <div><MD>\n<p><MD>**текст**</MD></p>\n</MD></div> после"
     expectedRe = re.compile("^<p>перед <div>.*</div> после</p>$", re.DOTALL)
