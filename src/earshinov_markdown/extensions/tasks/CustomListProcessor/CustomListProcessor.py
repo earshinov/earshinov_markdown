@@ -1,8 +1,8 @@
 from .CustomHtmlListBuilder import CustomHtmlListBuilder
 from earshinov_markdown.utils.HierarchyBuilder import \
   HierarchyByIndentationBuilder
-from markdown import etree
 from markdown.blockprocessors import BlockProcessor
+from markdown.util import etree
 import re
 
 
@@ -22,7 +22,7 @@ class CustomListProcessor(BlockProcessor):
 
     builder = self._tryReuseLast(parent)
     if builder is None:
-      builder = HierarchyByIndentationBuilder(CustomHtmlListBuilder(etree, parent))
+      builder = HierarchyByIndentationBuilder(CustomHtmlListBuilder(self.parser, parent))
 
     block = blocks.pop(0)
     # многострочные HTML-комментарии могут поломать структуру списка

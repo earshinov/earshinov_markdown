@@ -1,5 +1,6 @@
-from markdown import etree, Extension
+from markdown import Extension
 from markdown.blockprocessors import BlockProcessor
+from markdown.util import etree
 
 
 class NoteMetaProcessor(BlockProcessor):
@@ -34,4 +35,4 @@ class NoteMetaProcessor(BlockProcessor):
 class NotesMetaProcessorExtension(Extension):
 
   def extendMarkdown(self, md, md_globals):
-    md.parser.blockprocessors.add('notemeta', NoteMetaProcessor(md), '<paragraph')
+    md.parser.blockprocessors.add('notemeta', NoteMetaProcessor(md.parser), '<paragraph')

@@ -1,6 +1,7 @@
-from markdown import Extension, etree
+from markdown import Extension, Markdown
 from markdown.postprocessors import Postprocessor
 from markdown.treeprocessors import Treeprocessor
+from markdown.util import etree
 import markdown
 import re
 
@@ -144,7 +145,7 @@ class StripSingleParagraphTreeProcessor(Treeprocessor):
       p = root[0]
       if (not p.tail or p.tail.isspace()) and len(p.attrib) == 0:
         # Делаем p корневым элементом
-        p.tag = markdown.DOC_TAG
+        p.tag = Markdown.doc_tag
         if len(p) == 0:
           # Нюанс, из-за которого этот tree-процессор необходимо добавлять дважды.
           # Чтобы Markdown подхватил новый корневой элемент, он должен быть непуст

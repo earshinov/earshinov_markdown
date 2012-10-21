@@ -1,5 +1,6 @@
-from markdown import etree, Extension
+from markdown import Extension
 from markdown.treeprocessors import Treeprocessor
+from markdown.util import etree
 
 
 class TableMarkupTreeProcessor(Treeprocessor):

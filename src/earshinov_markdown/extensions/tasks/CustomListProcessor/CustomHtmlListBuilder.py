@@ -1,5 +1,7 @@
 from earshinov_markdown.utils.HierarchyBuilder import HierarchyBuilderWithQueue
 from markdown.blockprocessors import HRProcessor
+from markdown.util import etree
+
 
 class CustomHtmlListBuilder(HierarchyBuilderWithQueue):
 
@@ -8,11 +10,10 @@ class CustomHtmlListBuilder(HierarchyBuilderWithQueue):
       self.char = char
       self.element = element
 
-  def __init__(self, etree, root):
+  def __init__(self, parser, root):
     super(CustomHtmlListBuilder, self).__init__()
-    self._etree = etree
     self._root = root
-    self._hrProcessor = HRProcessor()
+    self._hrProcessor = HRProcessor(parser)
 
   rootUl = property(lambda self: None if not self._levels else self._levels[0].element)
 
@@ -38,11 +39,11 @@ class CustomHtmlListBuilder(HierarchyBuilderWithQueue):
 
   def _createUl(self, parent, char):
     if char is None or char == '*':
-      return self._etree.SubElement(parent, 'ul')
+      return etree.SubElement(parent, 'ul')
     elif char == '-':
-      return self._etree.SubElement(parent, 'ol')
+      return etree.SubElement(parent, 'ol')
     elif char == '|':
-      return self._etree.SubElement(parent, 'ul', { 'class': 'details' })
+      return etree.SubElement(parent, 'ul', { 'class': 'details' })
     else:
       raise Exception("Invalid char")
 
@@ -52,7 +53,7 @@ class CustomHtmlListBuilder(HierarchyBuilderWithQueue):
     # вместо использования этого текста добавляем элементу списка класс "separator"
     shouldBeSeparator = self._hrProcessor.test(parent, text)
 
-    li = self._etree.SubElement(parent, 'li')
+    li = etree.SubElement(parent, 'li')
     if shouldBeSeparator:
       li.set('class', 'separator')
     else:

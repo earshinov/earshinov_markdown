@@ -1,8 +1,7 @@
 from markdown import Extension
-from markdown.inlinepatterns import BasePattern
+from markdown.inlinepatterns import Pattern
 
-
-class ItemTypePattern(BasePattern):
+class ItemTypePattern(Pattern):
   '''Позволяет задавать типы задач, поддерживаемые в tasks, в виде [normal], [freetime] и т.д.'''
 
   KNOWN_TYPES = (
@@ -13,7 +12,7 @@ class ItemTypePattern(BasePattern):
     super(ItemTypePattern, self).__init__(r'(\s+|^)\[(%s)\](\s+|$)' % '|'.join(self.KNOWN_TYPES), **kwargs)
 
   def handleMatch(self, m):
-    return '%s{@class=type_%s}%s' % (m.group(2), m.group(3), m.group(4))
+    return '%s{@class=type_%s}' % (m.group(2), m.group(3))
 
 
 class ItemTypeExtension(Extension):

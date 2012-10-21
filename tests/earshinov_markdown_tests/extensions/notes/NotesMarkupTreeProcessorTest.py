@@ -1,6 +1,6 @@
 from earshinov_markdown.extensions.notes.NotesMarkupTreeProcessor import \
   NotesMarkupTreeProcessor
-from markdown import etree
+from markdown.util import etree
 import re
 import unittest
 
@@ -48,7 +48,7 @@ $''', re.VERBOSE)
 
   def test_content_before_first_heading_is_ignored(self):
     html = '''<p>Текст до первой заметки</p>'''
-    self.assertEquals("", self.htmlToString(html))
+    self.assertEqual("", self.htmlToString(html))
 
 
   def test_text_content_and_markup_is_preserved(self):
@@ -140,9 +140,3 @@ r'''^
 </div>\s*
 $''', re.VERBOSE)
     self.assertRegex(self.htmlToString(html), expectedRe)
-
-
-
-
-
-

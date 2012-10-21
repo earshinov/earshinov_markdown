@@ -1,5 +1,5 @@
-from markdown import etree
 from markdown.treeprocessors import Treeprocessor
+from markdown.util import etree
 
 
 class NotesMarkupTreeProcessor(Treeprocessor):

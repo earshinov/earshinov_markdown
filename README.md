@@ -5,7 +5,7 @@ A personal set of [python-markdown][] extensions and some scripts based on them.
 Requirements:
 
   * Python ≥ 3.2
-  * [python-markdown][]
+  * [python-markdown][] 2.2
 
 For running unit tests:
 
